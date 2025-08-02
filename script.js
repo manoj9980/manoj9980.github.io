@@ -6,7 +6,7 @@ const svgWidth = width;
 const svgHeight = height;
 
 let data;
-d3.csv("data/Current_Employee_Names__Salaries__and_Position_Titles_20250726.csv")
+d3.csv("Current_Employee_Names__Salaries__and_Position_Titles_20250726.csv")
   .then(csv => {
     console.log("CSV loaded successfully.");
 
