@@ -6,7 +6,7 @@ const svgWidth = width;
 const svgHeight = height;
 
 let data;
-d3.csv("Current_Employee_Names__Salaries__and_Position_Titles_20250726.csv")
+d3.csv("data/Current_Employee_Names__Salaries__and_Position_Titles_20250726.csv")
   .then(csv => {
     console.log("CSV loaded successfully.");
 
@@ -416,7 +416,7 @@ function drawPoliceRoleHistogram(chartData) {
 
   const roleGroups = d3.group(policeData, d => d["Job Titles"].trim());
   const roles = Array.from(roleGroups.entries())
-    .filter(([_, v]) => v.length >= 5)
+    .filter(([_, v]) => v.length > 0)
     .map(([role]) => role)
     .sort();
 
@@ -440,7 +440,14 @@ function drawPoliceRoleHistogram(chartData) {
     .text(d => d);
 
   function updateHistogram(role) {
-    const roleData = roleGroups.get(role)?.map(d => +d["Annual Salary"]) || [];
+    const raw = roleGroups.get(role);
+    const roleData = raw?.map(d => +d["Annual Salary"]) || [];
+
+    let [min, max] = d3.extent(roleData);
+    if (min === max) {
+      min -= 1000;
+      max += 1000;
+    }
 
     const stats = computeBoxplotStats(roleData);
 
@@ -476,7 +483,7 @@ function drawPoliceRoleHistogram(chartData) {
     }
 
     const x = d3.scaleLinear()
-      .domain(d3.extent(roleData))
+      .domain([min, max])
       .nice()
       .range([0, chartWidth]);
 
