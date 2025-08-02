@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Narrative Visualization of the City of Chicago Employee Salaries</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/d3-annotation@2.5.1/dist/d3-annotation.min.js"></script>
+</head>
+<body>
+  <div id="viz">
+    <h1>City of Chicago Employee Pay</h1>
+
+    <div id="main-wrapper" style="display: flex; flex-direction: column; align-items: center;">
+      
+      <div id="scene-container">
+        <svg id="scene-svg" width="960" height="600"></svg>
+        
+        <div id="filters">
+          <div id="jobtitle-container" style="margin-top: 10px; display: none;">
+            <label for="jobtitle-filter">Job Title:</label>
+            <select id="jobtitle-filter">
+              <option value="">All</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div id="subtitle" style="margin-top: 20px; max-width: 900px; text-align: center;"></div>
+
+      <div id="controls" style="margin-top: 20px;">
+        <button id="prev-btn">Previous</button>
+        <button id="next-btn">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
