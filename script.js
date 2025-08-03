@@ -74,58 +74,48 @@ function showScene(index) {
 
   if (index === 0) {
     const svg = drawTitleScene();
-    addSubtitle(svg, [
-      "This narrative visualization explores the salaries of employees working for the City of Chicago.",
-      "Public service roles range from administrative staff to law enforcement and specialized engineers,",
-      "all contributing to the operations of the city. By diving into their compensation patterns,",
-      "we uncover how different departments and roles are valued within the public workforce."
-    ], 90);
+
   } else if (index === 1) {
     const svg = drawSalaryTypePie(data);
-    addSubtitle(svg, [
-      "City employees are compensated in one of two primary ways: through an annual salary or an hourly wage.",
-      "This chart shows the overall split between salaried and hourly workers in the City of Chicago workforce.",
-      "Salaried roles often reflect full-time, long-term positions with more stable compensation structures, ",
-      "while hourly roles may include temporary, seasonal, or part-time work. This distinction helps us understand ",
-      "how employment structures vary across departments and roles. Since salaried employees make up the bulk of the Chicago", 
-      "public workforce, we will focus our narrative visualization on their compensation patterns in the following scenes."
-    ], 90);
+    
   } else if (index === 2) {
     const svg = drawDepartmentBarChart(data);
-    addSubtitle(svg, [
-      "This chart highlights the ten City of Chicago departments with the highest number of employees, broken down",
-      "by compensation type. The Police and Fire Departments are the largest, with workforces that are overwhelmingly", 
-      "salaried. In contrast, departments like Streets & Sanitation and Water Management follow in size but consist",
-      "mainly of hourly workers. Due to the sheer size of the Chicago Police Department and its predominance of full-time",
-      "salaried roles, it becomes especially important to closely analyze its compensation patterns in the following scenes."
-    ], 90);
+    
   } else if (index === 3) {
     const svg = drawDepartmentSalaryHistogram(data);
-    addSubtitle(svg, [
-      "This chart shows the distribution of annual salaries among full-time, salaried employees in the Chicago Police Department.",
-      "While a large number of police department employees earn between $90k and $130k annually, salaries vary widely—from under ",
-      "$60k to over $200k. This variation reflects differences not only between ranks and roles, but also within the same job titles",
-      "due to factors like tenure, overtime, or promotions. To better understand these patterns, we will examine compensation at the",
-      "level of individual job titles in the next slide."
-    ], 80);
+
   } else if (index === 4) {
     svg = drawPoliceRoleHistogram(data)
   }
 }
 
-function addSubtitle(svg, textLines, margin) {
-  const subtitle = svg.append("text")
-    .attr("x", svgWidth / 2)
-    .attr("y", svgHeight - margin)
-    .attr("text-anchor", "middle")
-    .style("font-size", "14px")
-    .style("fill", "#555")
-    .style("font-weight", "normal");
+function addAnnotation(g, marginBottom, chartWidth, chartHeight, titleText, detailText) {
+  g.selectAll(".annotation").remove();
 
-  textLines.forEach((line, i) => {
-    subtitle.append("tspan")
-      .attr("x", svgWidth / 2)
-      .attr("dy", i === 0 ? 0 : "1.2em")
+  //const marginBottom = 100;
+  const annotationX = 20;
+  const annotationY = chartHeight - marginBottom;
+
+  const annotationGroup = g.append("g")
+    .attr("class", "annotation")
+    .attr("transform", `translate(${annotationX}, ${annotationY})`);
+
+  annotationGroup.append("text")
+    .attr("class", "annotation-title")
+    .attr("x", 0)
+    .attr("y", 0)
+    .style("font-size", "16px")
+    .style("font-weight", "bold")
+    .text(titleText);
+
+  const wrappedDetail = detailText.split('\n');
+
+  wrappedDetail.forEach((line, i) => {
+    annotationGroup.append("text")
+      .attr("class", "annotation-detail")
+      .attr("x", 0)
+      .attr("y", 20 + i * 18)
+      .style("font-size", "13px")
       .text(line);
   });
 }
@@ -138,12 +128,20 @@ function drawTitleScene() {
 
   svg.append("text")
     .attr("x", width / 2)
-    .attr("y", height / 2)
+    .attr("y", height / 4)
     .attr("text-anchor", "middle")
     .style("font-size", "24px")
     .style("font-weight", "bold")
     .text("Exploring City of Chicago Employee Pay");
 
+  addAnnotation(
+    svg, 
+    100,
+    width, 
+    height, 
+    "How Are Chicago City Workers Paid?", 
+    "This story explores the structure of city employment pay—starting with hourly vs. salaried, then drilling down into specific departments and job roles. Public\nservice roles range from administrative staff to law enforcement and specialized engineers all contributing to the operations of the city. By diving into their\ncompensation patterns, we uncover how different departments and roles are valued within the public workforce."
+  );
   return svg;
 }
 
@@ -182,6 +180,15 @@ function drawSalaryTypePie(chartData) {
   svg.append("text").attr("x", width / 2).attr("y", 40).attr("text-anchor", "middle")
     .style("font-size", "24px").style("font-weight", "bold")
     .text("Distribution of Employee Compensation Type");
+
+  addAnnotation(
+    svg, 
+    100,
+    width, 
+    height, 
+    "Most City Workers Are on Salary", 
+    "City employees are compensated in one of two primary ways: through an annual salary or an hourly wage. This chart shows the overall split between salaried and\nhourly workers in the City of Chicago workforce. Salaried roles often reflect full-time, long-term positions with more stable compensation structures, while\nhourly roles may include temporary, seasonal, or part-time work. This distinction helps us understand how employment structures vary across departments and\nroles. Based on this chart, salaried employees make up almost 78% of the total Chicago public workforce. As they make up the bulk of the public workforce, we\nwill focus our narrative visualization on their compensation patterns in the following scenes."
+  );
 
   return svg;
 }
@@ -305,6 +312,15 @@ function drawDepartmentBarChart(chartData) {
       .attr("alignment-baseline", "middle");
   });
 
+  addAnnotation(
+    svg, 
+    100,
+    width, 
+    height, 
+    "Police and Fire Departments Dominate Full-Time Roles", 
+    "This chart highlights the ten City of Chicago departments with the highest number of employees, broken down by compensation type. The Police and Fire\nDepartments are the largest, with overwhelmingly salaried workforces. These two departments not only have large workforces but also the highest numbers of\nsalaried employees. In contrast, departments like Streets & Sanitation and Water Management follow in size but consist mainly of hourly workers. Due to the\nsheer size of the Chicago Police Department and its predominance of full-time salaried roles, it becomes important to analyze the compensation patterns of\nsalaried employees of the Chicago Police Department in the following scenes."
+  );
+
   return svg;
 }
 
@@ -372,6 +388,15 @@ function drawDepartmentSalaryHistogram(chartData) {
     .attr("width", d => Math.max(0, x(d.x1) - x(d.x0) - 1))
     .attr("height", d => chartHeight - y(d.length))
     .attr("fill", "#1f77b4");
+
+  addAnnotation(
+    svg, 
+    80,
+    width, 
+    height, 
+    "Wide Range of Pay in the Chicago Police Department", 
+    "This chart shows the distribution of annual salaries among full-time, salaried employees in the Chicago Police Department. While a large number of police\ndepartment employees earn between $90k and $130k annually, salaries vary greatly, from below $60K to over $200K, showing a broad compensation structure\nwithin the department. This variation reflects differences not only between ranks and roles, but also within the same job titles due to factors like tenure, overtime,\nor promotions. To better understand these patterns, we will examine compensation at the level of individual job titles in the next slide."
+  );
 
   return svg;
 }
@@ -550,15 +575,21 @@ function drawPoliceRoleHistogram(chartData) {
 
   d3.select("#scene-container")
   .append("div")
-  .attr("id", "boxplot-caption")
+  .attr("id", "role-annotation")
   .style("padding", "10px 60px")
   .style("font-family", "sans-serif")
-  .style("font-size", "16px")
-  .style("color", "#555")
-  .style("max-width", "800px")  // control wrapping width
+  .style("color", "black")
+  .style("max-width", "800px")
   .style("line-height", "1.4em")
   .style("word-wrap", "break-word")
-  .text("Here we allow for user exploration of roles within the Chicago Police Department. Select a job title from the dropdown to view its salary distribution. This view helps reveal disparities across positions — from patrol officers to command staff — and provides insight into role-specific compensation bands and a boxplot summary of a given role.");
+  .html(`
+    <div style="font-size: 16px; font-weight: bold; color: black;">Drill Down by Role</div>
+    <div style="font-size: 13px; color: black;">
+      Users can use the dropdown to explore salary distribution for specific roles. Here we allow for user exploration of roles within the Chicago Police
+      Department. Select a job title from the dropdown to view its salary distribution. This view helps reveal disparities across positions — from patrol
+      officers to command staff — and provides insight into role-specific compensation bands and a boxplot summary of a given role.
+    </div>
+  `);
 
   return svg;
 }
