@@ -85,14 +85,13 @@ function showScene(index) {
     const svg = drawDepartmentSalaryHistogram(data);
 
   } else if (index === 4) {
-    svg = drawPoliceRoleHistogram(data)
+    const svg = drawPoliceRoleHistogram(data)
   }
 }
 
 function addAnnotation(g, marginBottom, chartWidth, chartHeight, titleText, detailText) {
   g.selectAll(".annotation").remove();
 
-  //const marginBottom = 100;
   const annotationX = 20;
   const annotationY = chartHeight - marginBottom;
 
