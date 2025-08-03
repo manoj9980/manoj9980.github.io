@@ -585,9 +585,9 @@ function drawPoliceRoleHistogram(chartData) {
   .html(`
     <div style="font-size: 16px; font-weight: bold; color: black;">Drill Down by Role</div>
     <div style="font-size: 13px; color: black;">
-      Users can use the dropdown to explore salary distribution for specific roles. Here we allow for user exploration of roles within the Chicago Police
-      Department. Select a job title from the dropdown to view its salary distribution. This view helps reveal disparities across positions — from patrol
-      officers to command staff — and provides insight into role-specific compensation bands and a boxplot summary of a given role.
+      Users can use the dropdown to explore salary distribution for specific roles. Here, we allow for user exploration of roles within the Chicago Police
+      Department. This view helps reveal disparities across positions and provides insight into role-specific compensation bands and a boxplot summary of
+      a given role.
     </div>
   `);
 
